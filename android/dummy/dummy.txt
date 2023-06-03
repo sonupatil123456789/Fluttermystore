@@ -1,0 +1,154 @@
+Stepper(
+                              type: StepperType.vertical,
+                              physics: ScrollPhysics(),
+                              currentStep: value.currentStep,
+                              onStepTapped: (step) =>
+                                  authController.tapped(step),
+                              onStepContinue: authController.continuedStep,
+                              onStepCancel: authController.cancelStep,
+                              steps: <Step>[
+                                Step(
+                                  title: new Text('Account'),
+                                  content: Column(
+                                    children: <Widget>[
+                                      CoustomTextfield(
+                                        labelText: "Name",
+                                        placeholder: 'Enter your name',
+                                        isPasswordTextField: false,
+                                        width: screenwidth * 0.80,
+                                        controller: InputFielUtils
+                                            .registerNameController,
+                                        maxline: 1,
+                                        FocusNodeNames: InputFielUtils
+                                            .registerNameFocusNode,
+                                        changeFocusNode: InputFielUtils
+                                            .registerEmailFocusNode,
+                                        iconName: Icons.verified_user,
+                                      ),
+                                      CoustomTextfield(
+                                        controller: InputFielUtils
+                                            .registerEmailController,
+                                        isPasswordTextField: false,
+                                        labelText: 'Email',
+                                        maxline: 1,
+                                        placeholder: 'Enter your email',
+                                        width: screenwidth * 0.80,
+                                        FocusNodeNames: InputFielUtils
+                                            .registerEmailFocusNode,
+                                        changeFocusNode: InputFielUtils
+                                            .registerNumberFocusNode,
+                                        iconName: Icons.email,
+                                      ),
+                                    ],
+                                  ),
+                                  isActive: value.currentStep >= 0,
+                                  state: value.currentStep >= 0
+                                      ? StepState.complete
+                                      : StepState.disabled,
+                                ),
+                                Step(
+                                  title: new Text('Mobile No'),
+                                  content: Column(
+                                    children: <Widget>[
+                                      CoustomTextfield(
+                                        controller: InputFielUtils
+                                            .registerNumberController,
+                                        isPasswordTextField: true,
+                                        labelText: 'Number',
+                                        maxline: 1,
+                                        placeholder: 'Enter your number',
+                                        width: screenwidth * 0.80,
+                                        FocusNodeNames: InputFielUtils
+                                            .registerNumberFocusNode,
+                                        changeFocusNode: InputFielUtils
+                                            .registerAddressFocusNode,
+                                        iconName: Icons.lock,
+                                      ),
+                                    ],
+                                  ),
+                                  isActive: value.currentStep >= 0,
+                                  state: value.currentStep >= 1
+                                      ? StepState.complete
+                                      : StepState.disabled,
+                                ),
+                                Step(
+                                  title: new Text('Address'),
+                                  content: Column(
+                                    children: <Widget>[
+                                      CoustomTextfield(
+                                        controller: InputFielUtils
+                                            .registerAddressController,
+                                        isPasswordTextField: true,
+                                        labelText: 'Address',
+                                        maxline: 1,
+                                        placeholder: 'Enter ypur address',
+                                        width: screenwidth * 0.80,
+                                        FocusNodeNames: InputFielUtils
+                                            .registerAddressFocusNode,
+                                        changeFocusNode: InputFielUtils
+                                            .registerPasswordFocusNode,
+                                        iconName: Icons.lock,
+                                      ),
+                                    ],
+                                  ),
+                                  isActive: value.currentStep >= 0,
+                                  state: value.currentStep >= 2
+                                      ? StepState.complete
+                                      : StepState.disabled,
+                                ),
+                                Step(
+                                  title: new Text('Password'),
+                                  content: Column(
+                                    children: <Widget>[
+                                      CoustomTextfield(
+                                        controller: InputFielUtils
+                                            .registerPassowrdController,
+                                        isPasswordTextField: true,
+                                        labelText: 'Password',
+                                        maxline: 1,
+                                        placeholder: 'Enter your password',
+                                        width: screenwidth * 0.80,
+                                        FocusNodeNames: InputFielUtils
+                                            .registerPasswordFocusNode,
+                                        changeFocusNode: InputFielUtils
+                                            .registerPasswordFocusNode,
+                                        iconName: Icons.lock,
+                                      ),
+                                    ],
+                                  ),
+                                  isActive: value.currentStep >= 0,
+                                  state: value.currentStep >= 3
+                                      ? StepState.complete
+                                      : StepState.disabled,
+                                ),
+                              ],
+                            );
+
+
+
+
+
+
+
+
+
+
+
+                              int _currentStep = 0;
+
+  int get currentStep => _currentStep;
+
+  tapped(int step) {
+    _currentStep = step;
+    notifyListeners();
+  }
+
+  continuedStep() {
+    _currentStep < 3 ? _currentStep += 1 : null;
+    notifyListeners();
+  }
+
+  cancelStep() {
+    _currentStep > 0 ? _currentStep -= 1 : null;
+    notifyListeners();
+  }

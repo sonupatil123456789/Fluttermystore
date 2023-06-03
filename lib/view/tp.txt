@@ -1,0 +1,17 @@
+     colorScheme: const ColorScheme(
+                                      brightness: Brightness.light,
+                                      primary: TheamColors.HtexrtColor1,
+                                      onPrimary: TheamColors.HtexrtColor2,
+                                      secondary: Colors.green,
+                                      onSecondary: Colors.green,
+                                      error: Colors.redAccent,
+                                      onError: Colors.redAccent,
+                                      background: Colors.green,
+                                      onBackground: Colors.green,
+                                      surface: Colors.green,
+                                      onSurface: Colors.green)),
+
+
+                                      shreyaspatil
+
+                                      userimages
