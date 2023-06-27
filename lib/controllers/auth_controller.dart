@@ -17,9 +17,12 @@ class AuthController with ChangeNotifier {
   bool _loading = false;
   bool get loading => _loading;
 
+  dynamic _user;
+  dynamic get user => _user ;
+
   setLoadingState(bool val) {
     _loading = val;
-    notifyListeners();
+    // notifyListeners();
   }
 
 // provider controller for changing the state of login screen page which will show the data or handell data on error
@@ -40,7 +43,8 @@ class AuthController with ChangeNotifier {
           ? ManageSeassion.setUserDetails(context, user["user"])
           : null;
       user["success"] == true
-          ? Navigator.pushNamed(context, RoutesName.home)
+          ? Navigator.pushNamedAndRemoveUntil(
+              context, RoutesName.home, (Route<dynamic> route) => false)
           : null;
       notifyListeners();
       if (kDebugMode) {
@@ -77,15 +81,30 @@ class AuthController with ChangeNotifier {
     try {
       dynamic getSeassionUser = await ManageSeassion.getUserDetails();
 
-      var user = await authRepo.authanticateUser(
-          getSeassionUser.elementAt(4), context);
       if (kDebugMode) {
-        print("user : $user");
+        print("usertoken exhist : ${getSeassionUser.elementAt(4)}");
       }
-      return user["success"] == true ? true : false;
-    } catch (exception) {
-
-    }
+      if (getSeassionUser.elementAt(4) == "" ||
+          getSeassionUser.elementAt(4) == null) {
+        return false;
+      } else {
+        return true;
+      }
+    } catch (exception) {}
   }
-   
+
+  // provider controller for authanticating the user by authorizing homescreen by serverside authantication
+  Future homeScreenAuthintacateController(context) async {
+    setLoadingState(true);
+    try {
+      dynamic getSeassionUser = await ManageSeassion.getUserDetails();
+      _user = await authRepo.authanticateUser(
+          getSeassionUser.elementAt(4), context);
+      setLoadingState(false);
+      if (kDebugMode) {
+        print("user : ${user}");
+      }
+      // return await user['success'] == true ? true : false;
+    } catch (exception) {}
+  }
 }

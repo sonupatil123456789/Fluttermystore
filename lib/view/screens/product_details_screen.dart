@@ -13,14 +13,15 @@ import 'package:mystore/view/components/increment_decrement.dart';
 import 'package:mystore/view/components/navbar.dart';
 import 'package:mystore/view/components/paragraph_text.dart';
 import 'package:provider/provider.dart';
-
 import '../../controllers/cart_controller.dart';
+import '../../models/product_model.dart';
 
 bool expandedheight = false;
 bool textellips = false;
 
 class ProductDetailsScreen extends StatefulWidget {
   dynamic product;
+
   ProductDetailsScreen({super.key, required this.product});
 
   @override
@@ -35,13 +36,14 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     final dynamic screenhight = MediaQuery.of(context).size.height;
     final dynamic screenwidth = MediaQuery.of(context).size.width;
 
+    print("===================${widget.product['SingleProduct'].sId}");
+
     Map data = {
-      "product": widget.product["SingleProduct"]["_id"],
+      "product": widget.product['SingleProduct'].sId,
     };
-    final List<dynamic> imgList =
-        widget.product["SingleProduct"]["productImages"];
+    final List<String>? imgList = widget.product['SingleProduct'].productImages;
     late String likes = "200000";
-    var discription = widget.product["SingleProduct"]["discription"];
+    var discription = widget.product['SingleProduct'].discription;
 
     return SafeArea(
       child: Scaffold(
@@ -60,7 +62,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     // color: Color.fromARGB(255, 19, 19, 19),
                     child: PageView.builder(
                         padEnds: false,
-                        itemCount: imgList.length,
+                        itemCount: imgList!.length,
                         controller: PageController(keepPage: true),
                         pageSnapping: true,
                         itemBuilder: (context, pagePosition) {
@@ -146,8 +148,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               size: screenwidth * 0.04,
                             ),
                             Ptext(
-                              fonttext: widget.product["SingleProduct"]
-                                      ["rating"]
+                              fonttext: widget.product['SingleProduct'].rating
                                   .toString(),
                               size: screenwidth * 0.022,
                               weight: FontWeight.w600,
@@ -213,13 +214,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             H1text(
-                              fonttext: widget.product["SingleProduct"]
-                                  ["title"],
+                              fonttext: widget.product['SingleProduct'].title,
                               size: screenwidth * 0.046,
                               weight: FontWeight.w600,
                             ),
                             Text(
-                                " \u{20B9} ${widget.product["SingleProduct"]["price"].toString()}",
+                                " \u{20B9} ${widget.product['SingleProduct'].price.toString()}",
                                 style: GoogleFonts.rubik(
                                   fontWeight: FontWeight.w600,
                                   fontSize: screenwidth * 0.047,
@@ -234,14 +234,14 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         Container(
                           height: expandedheight == false
                               ? screenhight * 0.07
-                              : discription.length.toDouble() / 3,
+                              : discription!.length.toDouble() / 3,
                           width: screenwidth * 0.90,
                           // color: Color.fromARGB(255, 227, 255, 68),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                discription,
+                                discription!,
                                 textAlign: TextAlign.start,
                                 textDirection: TextDirection.ltr,
                                 overflow: textellips == false
@@ -289,14 +289,16 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             width: screenwidth * 0.90,
                             // color: Color.fromARGB(59, 227, 221, 221),
                             child: ChoiceChipCatogary(
-                              data: widget.product["SingleProduct"]["size"],
+                              data: widget.product['SingleProduct'].size as dynamic ,
                               bgColor: TheamColors.backgroundColor,
                               selectColor: TheamColors.backgroundColor,
                               textColor: TheamColors.PtexrtColor1,
                               isVisible: false,
                               ChoiceChip: (choiceValue) {
                                 data['size'] = choiceValue;
+                                print(choiceValue);
                               },
+                              chipType: 'Size',
                             )),
                         SizedBox(
                           height: screenhight * 0.02,
@@ -316,10 +318,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             pL: screenwidth * 0.01,
                             pR: screenwidth * 0.03,
                             activeBtn: TheamColors.primaryColor,
-                            data: widget.product["SingleProduct"]["color"],
+                            data: widget.product['SingleProduct'].color as dynamic ,
                             getColorValue: (colorValue) {
                               data['color'] = colorValue;
-                            },
+                            }, chipType: 'Color',
                           ),
                         ),
 

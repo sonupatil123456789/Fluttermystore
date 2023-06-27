@@ -110,4 +110,31 @@ class networkApi extends BaseApi {
         throw FetchDataException(message: "").msgString();
     }
   }
+  
+  @override
+  Future updateApiResponse(String url, data, context) async{
+        try {
+      if (kDebugMode) {
+        print(url);
+      }
+      response = await http.put(
+        Uri.parse(url),
+        body: jsonEncode(data),
+        headers: <String, String>{
+          'Content-Type': 'application/json ',
+        },
+      ).timeout(const Duration(seconds: 10));
+      jsonresponse = httpResponses(response);
+    } on SocketException catch (ex) {
+      throw InternetException(message: "").msgString();
+    } on RequestTimeout catch (ex) {
+      throw RequestTimeout(message: "").msgString();
+    } on HttpException catch (ex) {
+      throw HttpErrorException(message: "").msgString();
+    } catch (ex) {
+      throw UnhandledException(message: "").msgString();
+    }
+
+    return jsonresponse;
+  }
 }

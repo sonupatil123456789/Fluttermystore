@@ -1,19 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:mystore/controllers/product_controller.dart';
-import 'package:mystore/view/components/bottom_bar.dart';
 import 'package:mystore/view/components/bottom_sheet.dart';
 import 'package:mystore/view/components/card.dart';
 import 'package:mystore/view/components/heading_text.dart';
-import 'package:mystore/view/components/navbar.dart';
-import 'package:mystore/view/screens/cart_list.dart';
-import 'package:mystore/view/screens/search_screen.dart';
 import 'package:provider/provider.dart';
 import '../../controllers/cart_controller.dart';
 import '../../utils/constants/assets.dart';
 import '../../utils/constants/colorpallets.dart';
-import '../components/dropdown.dart';
+import '../../utils/routes/routes_name.dart';
 import '../components/icon_svg_button.dart';
 import '../components/paragraph_text.dart';
 
@@ -32,13 +26,19 @@ class _AllProductScreenState extends State<AllProductScreen> {
   void initState() {
     productController = Provider.of<ProductController>(context, listen: false);
     productController.getAllProductsController(context);
+
     cartController = Provider.of<CartController>(context, listen: false);
+    cartController.fetchUserCartController(context);
     super.initState();
+  }
+
+  filterProductsController(queryData) async {
+    await productController.filterProductsController(context, queryData);
+    Navigator.pop(context);
   }
 
   @override
   Widget build(BuildContext context) {
-    print("built function ran");
     final dynamic screenhight = MediaQuery.of(context).size.height;
     final dynamic screenwidth = MediaQuery.of(context).size.width;
     return Expanded(
@@ -69,7 +69,8 @@ class _AllProductScreenState extends State<AllProductScreen> {
                                 width: 8,
                               ),
                               Ptext(
-                                fonttext: "[${value.products.products.length}]",
+                                fonttext:
+                                    "[${value.loading == true ? "" : value.products.products!.length.toString()}]",
                                 size: screenwidth * 0.032,
                                 weight: FontWeight.w400,
                               ),
@@ -80,52 +81,53 @@ class _AllProductScreenState extends State<AllProductScreen> {
                         height: screenhight * 0.02,
                         child: IconSvgButton(
                             crowselclick: () {
-                              showCoustomBottomSheet(context);
+                              showCoustomBottomSheet(context, screenwidth,
+                                  screenhight, filterProductsController);
                             },
                             height: screenhight,
                             width: screenwidth,
-                            iconimage: AssetImgLinks.filter),
+                            iconimage: AssetImgLinks.filter,  iconImageColor: TheamColors.primaryColor,),
                       ),
                       IconSvgButton(
                           crowselclick: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => SearchScreen()),
-                            );
+                            Navigator.pushNamed(context, RoutesName.searchScreen);
                           },
                           height: screenhight,
                           width: screenwidth,
-                          iconimage: AssetImgLinks.search),
+                          iconimage: AssetImgLinks.search, iconImageColor: TheamColors.primaryColor,),
                       Stack(
                         children: [
                           Positioned(
                             right: 0,
                             // top: 2,
-                            child: Container(
-                                alignment: Alignment.center,
-                                width: screenwidth * 0.035,
-                                height: screenhight * 0.016,
-                                decoration: BoxDecoration(
-                                    color: Color.fromARGB(255, 255, 73, 73),
-                                    borderRadius: BorderRadius.circular(100)),
-                                child: const Text(
-                                  "4",
-                                  style: TextStyle(
-                                      fontSize: 10, color: Colors.white70),
-                                )),
+                            child: Consumer<CartController>(
+                              builder: (context, value, child) {
+                                return Container(
+                                    alignment: Alignment.center,
+                                    width: screenwidth * 0.035,
+                                    height: screenhight * 0.016,
+                                    decoration: BoxDecoration(
+                                        color: Color.fromARGB(255, 255, 73, 73),
+                                        borderRadius:
+                                            BorderRadius.circular(100)),
+                                    child: Text(
+                                      value.cart.userCart == null
+                                          ? "0"
+                                          : value.cart.userCart!.length
+                                              .toString(),
+                                      style: TextStyle(
+                                          fontSize: 10, color: Colors.white70),
+                                    ));
+                              },
+                            ),
                           ),
                           IconSvgButton(
                               crowselclick: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => CartList()),
-                                );
+                                Navigator.pushNamed(context, RoutesName.myCart);
                               },
                               height: screenhight,
                               width: screenwidth,
-                              iconimage: AssetImgLinks.cart),
+                              iconimage: AssetImgLinks.cart,  iconImageColor: TheamColors.primaryColor,)
                         ],
                       ),
                     ],
@@ -141,61 +143,63 @@ class _AllProductScreenState extends State<AllProductScreen> {
                 print("value : ${value.products.success}");
 
                 var dataListLength = value.products.products;
-                return dataListLength == 0 || dataListLength == null
-                    ? Center(
-                        child:
-                            Text("Your cart is empty Please continue shopping"),
-                      )
-                    : value.loading == true
-                        ? const Center(child: CircularProgressIndicator())
-                        : Expanded(
-                            child: value.loading == false
-                                ? Container(
-                                    width: screenwidth,
-                                    height: screenhight * 0.36,
-                                    // color: Color.fromARGB(255, 214, 83, 83),
-                                    child: GridView.builder(
-                                      shrinkWrap: false,
-                                      itemCount: value.products.products.length,
-                                      gridDelegate:
-                                          new SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount: 2,
-                                        childAspectRatio: 2 / 3,
-                                      ),
-                                      itemBuilder:
-                                          (BuildContext context, int index) {
-                                        var iteams =
-                                            value.products.products[index];
-                                        return Padding(
-                                          padding:
-                                              EdgeInsets.fromLTRB(0, 5, 0, 5),
-                                          child: Card1(
-                                            addToCart: () {
-                                              Map data = {
-                                                "product": iteams['_id'],
-                                                "quantity": 1,
-                                                "color": iteams['color'][0],
-                                                "size": iteams['size'][0]
-                                              };
 
-                                              cartController
-                                                  .addToCartController(
-                                                      context, data);
-                                            },
-
-                                            discription: iteams['discription'],
-                                            price: iteams['price'].toString(),
-                                            thumbnailImage: iteams['thumbnail'],
-                                            title: iteams['title'],
-                                            productId: iteams['_id'],
-                                            SingleProduct: iteams,
-                                            // : iteams,
-                                          ),
-                                        );
-                                      },
-                                    ))
-                                : const Center(
-                                    child: CircularProgressIndicator()));
+                if (value.loading == true || dataListLength == null) {
+                  return Expanded(
+                      child: Container(
+                          alignment: Alignment.center,
+                          child: const CircularProgressIndicator(
+                            color: Colors.deepPurpleAccent,
+                          )));
+                } else {
+                  if (dataListLength.length == 0 || dataListLength == null) {
+                    return const Expanded(
+                      child: Center(
+                        child: Text("No products"),
+                      ),
+                    );
+                  } else {
+                    return Expanded(
+                        child: Container(
+                            width: screenwidth,
+                            height: screenhight * 0.36,
+                            // color: Color.fromARGB(255, 214, 83, 83),
+                            child: GridView.builder(
+                              shrinkWrap: false,
+                              itemCount: value.products.products!.length,
+                              gridDelegate:
+                                  new SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                childAspectRatio: 2 / 3,
+                              ),
+                              itemBuilder: (BuildContext context, int index) {
+                                var items = value.products.products![index];
+                                return Padding(
+                                  padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+                                  child: Card1(
+                                    addToCart: () {
+                                      Map data = {
+                                        "product": items.sId,
+                                        "quantity": 1,
+                                        "color": items.color![0],
+                                        "size": items.size![0]
+                                      };
+                                      cartController.addToCartController(
+                                          context, data);
+                                    },
+                                    discription: items.discription.toString(),
+                                    price: items.price.toString(),
+                                    thumbnailImage: items.thumbnail.toString(),
+                                    title: items.title.toString(),
+                                    productId: items.sId.toString(),
+                                    SingleProduct: items,
+                                    likes: items.likes,
+                                  ),
+                                );
+                              },
+                            )));
+                  }
+                }
               },
             ),
           ],

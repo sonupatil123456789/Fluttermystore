@@ -1,42 +1,119 @@
-class CartModel {
+class OrderModel {
   bool? success;
   String? message;
-  List<UserCart>? userCart;
+  Order? order;
 
-  CartModel({this.success, this.message, this.userCart});
+  OrderModel({this.success, this.message, this.order});
 
-  CartModel.fromJson(Map<String, dynamic> json) {
+  OrderModel.fromJson(Map<String, dynamic> json) {
     success = json['success'];
     message = json['message'];
-    if (json['userCart'] != null) {
-      userCart = <UserCart>[];
-      json['userCart'].forEach((v) {
-        userCart!.add(new UserCart.fromJson(v));
-      });
-    }
+    order = json['Order'] != null ? new Order.fromJson(json['Order']) : null;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['success'] = this.success;
     data['message'] = this.message;
-    if (this.userCart != null) {
-      data['userCart'] = this.userCart!.map((v) => v.toJson()).toList();
+    if (this.order != null) {
+      data['Order'] = this.order!.toJson();
     }
     return data;
   }
 }
 
-class UserCart {
+class Order {
+  User? user;
+  String? status;
+  List<Items>? items;
+  String? sId;
+  int? iV;
+
+  Order({this.user, this.status, this.items, this.sId, this.iV});
+
+  Order.fromJson(Map<String, dynamic> json) {
+    user = json['user'] != null ? new User.fromJson(json['user']) : null;
+    status = json['status'];
+    if (json['items'] != null) {
+      items = <Items>[];
+      json['items'].forEach((v) {
+        items!.add(new Items.fromJson(v));
+      });
+    }
+    sId = json['_id'];
+    iV = json['__v'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.user != null) {
+      data['user'] = this.user!.toJson();
+    }
+    data['status'] = this.status;
+    if (this.items != null) {
+      data['items'] = this.items!.map((v) => v.toJson()).toList();
+    }
+    data['_id'] = this.sId;
+    data['__v'] = this.iV;
+    return data;
+  }
+}
+
+class User {
+  String? sId;
+  String? userId;
+  String? fullName;
+  String? email;
+  int? iV;
+  String? address;
+  String? images;
+  String? number;
+
+  User(
+      {this.sId,
+      this.userId,
+      this.fullName,
+      this.email,
+      this.iV,
+      this.address,
+      this.images,
+      this.number});
+
+  User.fromJson(Map<String, dynamic> json) {
+    sId = json['_id'];
+    userId = json['userId'];
+    fullName = json['fullName'];
+    email = json['email'];
+    iV = json['__v'];
+    address = json['address'];
+    images = json['images'];
+    number = json['number'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['_id'] = this.sId;
+    data['userId'] = this.userId;
+    data['fullName'] = this.fullName;
+    data['email'] = this.email;
+    data['__v'] = this.iV;
+    data['address'] = this.address;
+    data['images'] = this.images;
+    data['number'] = this.number;
+    return data;
+  }
+}
+
+class Items {
   Product? product;
-  num? quantity;
+  int? quantity;
   String? color;
   String? size;
   String? sId;
 
-  UserCart({this.product, this.quantity, this.color, this.size, this.sId});
+  Items({this.product, this.quantity, this.color, this.size, this.sId});
 
-  UserCart.fromJson(Map<String, dynamic> json) {
+  Items.fromJson(Map<String, dynamic> json) {
     product =
         json['product'] != null ? new Product.fromJson(json['product']) : null;
     quantity = json['quantity'];
@@ -60,26 +137,24 @@ class UserCart {
 
 class Product {
   String? sId;
-  dynamic? likes;
   String? title;
   String? discription;
-  dynamic? price;
-  num? rating;
-  dynamic? discountPercentage;
+  int? price;
+  dynamic? rating;
+  int? discountPercentage;
   List<String>? productImages;
   String? thumbnail;
-  String? category;
-  String? brand;
+  dynamic? category;
+  dynamic? brand;
   int? stock;
   List<String>? color;
   List<String>? size;
-  int? iV;
   String? createdAt;
   String? updatedAt;
+  int? iV;
 
   Product(
       {this.sId,
-       this.likes,
       this.title,
       this.discription,
       this.price,
@@ -92,13 +167,12 @@ class Product {
       this.stock,
       this.color,
       this.size,
-      this.iV,
       this.createdAt,
-      this.updatedAt});
+      this.updatedAt,
+      this.iV});
 
   Product.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
-    likes = json['likes'];
     title = json['title'];
     discription = json['discription'];
     price = json['price'];
@@ -111,15 +185,14 @@ class Product {
     stock = json['stock'];
     color = json['color'].cast<String>();
     size = json['size'].cast<String>();
-    iV = json['__v'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
+    iV = json['__v'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['_id'] = this.sId;
-    data['likes'] = this.likes;
     data['title'] = this.title;
     data['discription'] = this.discription;
     data['price'] = this.price;
@@ -132,9 +205,9 @@ class Product {
     data['stock'] = this.stock;
     data['color'] = this.color;
     data['size'] = this.size;
-    data['__v'] = this.iV;
     data['createdAt'] = this.createdAt;
     data['updatedAt'] = this.updatedAt;
+    data['__v'] = this.iV;
     return data;
   }
 }

@@ -1,71 +1,103 @@
-import 'package:carousel_slider/carousel_slider.dart';
+import 'dart:async';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:mystore/models/product_model.dart';
+import '../../utils/routes/routes_name.dart';
 
-class CrowselSlider extends StatelessWidget {
-  late int pagedotno = 0;
-  var height;
-  var width;
+class CrowselSlider extends StatefulWidget {
   Function crowselclick;
+  var width;
+  var height;
+  dynamic data;
 
   CrowselSlider(
-      {super.key, required this.crowselclick, required height, required width});
+      {super.key,
+      required this.crowselclick,
+      required this.data,
+      required this.width,
+      required this.height});
 
-  final List<String> imgList = [
-    'https://images.unsplash.com/photo-1520342868574-5fa3804e551c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ff92caffcdd63681a35134a6770ed3b&auto=format&fit=crop&w=1951&q=80',
-    'https://images.unsplash.com/photo-1522205408450-add114ad53fe?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=368f45b0888aeb0b7b08e3a1084d3ede&auto=format&fit=crop&w=1950&q=80',
-    'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=94a1e718d89ca60a6337a6008341ca50&auto=format&fit=crop&w=1950&q=80',
-    'https://images.unsplash.com/photo-1523205771623-e0faa4d2813d?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=89719a0d55dd05e2deae4120227e6efc&auto=format&fit=crop&w=1953&q=80',
-    'https://images.unsplash.com/photo-1508704019882-f9cf40e475b4?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=8c6e5e3aba713b17aa1fe71ab4f0ae5b&auto=format&fit=crop&w=1352&q=80',
-    'https://images.unsplash.com/photo-1519985176271-adb1088fa94c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=a0c8d632e977f94e5d312d9893258f59&auto=format&fit=crop&w=1355&q=80'
-  ];
+  @override
+  State<CrowselSlider> createState() => _CrowselSliderState();
+}
+
+class _CrowselSliderState extends State<CrowselSlider> {
+  final PageController _pageController = PageController(initialPage: 0);
+  int _currentPage = 0;
+  bool end = false;
+  var timercontroller;
+  var animationdispose;
+
+  @override
+  void initState() {
+    timercontroller = Timer.periodic(Duration(seconds: 2), (Timer timer) {
+      if (_currentPage == widget.data.length) {
+        end = true;
+      } else if (_currentPage == 0) {
+        end = false;
+      }
+      if (end == false) {
+        _currentPage++;
+      } else {
+        _currentPage--;
+      }
+      animationdispose = _pageController.animateToPage(
+        _currentPage,
+        duration: Duration(milliseconds: 1000),
+        curve: Curves.easeIn,
+      );
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    timercontroller.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    // return Expanded(
-    //   child: Container(
-    //     height: 200,
-    //     child: PageView.builder(
-    //         padEnds: false,
-    //         itemCount: imgList.length,
-    //         controller: PageController(keepPage: true),
-    //         pageSnapping: true,
-    //         itemBuilder: (context, pagePosition) {
-    //           return GestureDetector(
-    //             onTap: () {
-    //               crowselclick();
-    //             },
-    //             child: Container(
-    //                 margin: EdgeInsets.all(10),
-    //                 child: Image.network(imgList[pagePosition])),
-    //           );
-    //         }),
-    //   ),
-    // );
-    return CarouselSlider(
-      options: CarouselOptions(height: 200.0,
-      // padEnds: false,
-      initialPage: 1,
-      viewportFraction: 1,
-      reverse: false,
-      enableInfiniteScroll: false,
-      autoPlay: true,
-      aspectRatio: 16/9
-      ),
-      items: imgList.map((i) {
-        return Builder(
-          builder: (BuildContext context) {
-            return Container(
-                width: MediaQuery.of(context).size.width,
-                margin: EdgeInsets.symmetric(horizontal: 5.0),
-                decoration: BoxDecoration(color: Colors.amber),
-                child: Image.network(i.toString(), fit: BoxFit.cover,)
+    final dynamic screenhight = MediaQuery.of(context).size.height;
+    final dynamic screenwidth = MediaQuery.of(context).size.width;
 
-                );
-          },
-        );
-      }).toList(),
+    return Container(
+      // color: Colors.amber,
+      height: screenwidth * 0.60,
+      child: PageView.builder(
+          padEnds: false,
+          itemCount: widget.data.length,
+          controller: _pageController,
+          pageSnapping: true,
+          onPageChanged: (value) {},
+          itemBuilder: (context, pagePosition) {
+            return GestureDetector(
+              onTap: () {
+                Navigator.pushNamed(context, RoutesName.productsDetail,
+                    arguments: {"SingleProduct": widget.data[pagePosition]});
+                widget.crowselclick();
+              },
+              child: Container(
+                  // margin: EdgeInsets.all(10),
+                  child:
+
+
+                                                            CachedNetworkImage(
+                      imageUrl: widget.data[pagePosition].thumbnail,
+          width: screenwidth * 0.15,
+                    height: screenhight * 0.12,
+                      fit: BoxFit.contain,
+                      errorWidget: (context, url, error) => Icon(Icons.error),
+                      fadeOutDuration: const Duration(milliseconds: 1000),
+                      fadeOutCurve: Curves.easeOut,
+                      fadeInDuration: const Duration(milliseconds: 500),
+                    )
+              ),
+            );
+          }),
     );
   }
 }

@@ -9,8 +9,15 @@ import 'package:mystore/view/screens/favourate_wishlist.dart';
 
 class BottomBar extends StatelessWidget {
   Function screen;
+  Color backgroundColor;
+  Color iconColor;
 
-  BottomBar({super.key, required this.screen});
+  BottomBar({
+    super.key,
+    required this.screen,
+    required this.iconColor,
+    required this.backgroundColor,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +26,7 @@ class BottomBar extends StatelessWidget {
     return Container(
       width: screenwidth,
       height: screenhight * 0.07,
-      // color: Colors.amber,
+      color: backgroundColor,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -34,7 +41,7 @@ class BottomBar extends StatelessWidget {
                   },
                   height: screenhight,
                   width: screenwidth,
-                  iconimage: AssetImgLinks.home),
+                  iconimage: AssetImgLinks.home, iconImageColor: iconColor,),
               Ptext(
                 fonttext: "Home",
                 size: screenwidth * 0.028,
@@ -52,7 +59,7 @@ class BottomBar extends StatelessWidget {
                   },
                   height: screenhight,
                   width: screenwidth,
-                  iconimage: AssetImgLinks.list),
+                  iconimage: AssetImgLinks.list, iconImageColor: iconColor,),
               Ptext(
                 fonttext: "Products",
                 size: screenwidth * 0.028,
@@ -70,7 +77,7 @@ class BottomBar extends StatelessWidget {
                   },
                   height: screenhight,
                   width: screenwidth,
-                  iconimage: AssetImgLinks.brandWatermark),
+                  iconimage: AssetImgLinks.brandWatermark, iconImageColor: iconColor,),
               Ptext(
                 fonttext: "My Orders",
                 size: screenwidth * 0.028,
@@ -88,7 +95,7 @@ class BottomBar extends StatelessWidget {
                   },
                   height: screenhight,
                   width: screenwidth,
-                  iconimage: AssetImgLinks.favorite),
+                  iconimage: AssetImgLinks.favorite, iconImageColor: iconColor,),
               Ptext(
                 fonttext: "favorite",
                 size: screenwidth * 0.028,
@@ -106,7 +113,7 @@ class BottomBar extends StatelessWidget {
                   },
                   height: screenhight,
                   width: screenwidth,
-                  iconimage: AssetImgLinks.profile),
+                  iconimage: AssetImgLinks.profile, iconImageColor: iconColor,),
               Ptext(
                 fonttext: "Profile",
                 size: screenwidth * 0.028,

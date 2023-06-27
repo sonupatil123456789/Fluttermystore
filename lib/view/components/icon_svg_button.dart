@@ -9,10 +9,12 @@ class IconSvgButton extends StatelessWidget {
   var height;
   var width;
   String iconimage;
+  dynamic iconImageColor;
 
   IconSvgButton(
       {super.key,
       required this.crowselclick,
+      required this.iconImageColor,
       required this.height,
       required this.width,
       required this.iconimage});
@@ -32,6 +34,8 @@ class IconSvgButton extends StatelessWidget {
           children: [
             SvgPicture.asset(iconimage,
                 width: width * 0.050,
+                // color: Colors.amber,
+                colorFilter: ColorFilter.mode(iconImageColor, BlendMode.srcIn),
                 height: height * 0.026,
                 semanticsLabel: 'Cart'),
           ],

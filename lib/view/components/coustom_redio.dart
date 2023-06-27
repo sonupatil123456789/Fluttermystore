@@ -13,6 +13,7 @@ class CoustomRedio extends StatefulWidget {
   var pR;
   List data = [];
   Color activeBtn;
+  String chipType;
 
   CoustomRedio(
       {super.key,
@@ -21,6 +22,7 @@ class CoustomRedio extends StatefulWidget {
       required this.pL,
       required this.pR,
       required this.height,
+      required this.chipType,
       required this.data,
       required this.activeBtn});
 
@@ -61,7 +63,9 @@ class _CoustomRedioState extends State<CoustomRedio> {
                             style: BorderStyle.solid)
                         : null,
                     borderRadius: BorderRadius.circular(8),
-                    color: HexColor(widget.data[index].toString()),
+                    color: HexColor(widget.chipType == 'Filter'
+                        ? widget.data[index]['Value'].toString()
+                        : widget.data[index].toString()),
                   ),
                 ),
               ),

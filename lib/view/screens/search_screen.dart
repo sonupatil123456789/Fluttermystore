@@ -28,6 +28,9 @@ class SearchScreen extends StatelessWidget {
     final dynamic screenhight = MediaQuery.of(context).size.height;
     final dynamic screenwidth = MediaQuery.of(context).size.width;
     productController = Provider.of<ProductController>(context, listen: false);
+    productController.searchProductsController(context, "");
+
+    print("keyboard set state rannnnnnnnnn");
 
     return Scaffold(
       body: SafeArea(
@@ -90,13 +93,13 @@ class SearchScreen extends StatelessWidget {
                             onChanged: (value) {},
                             textAlign: TextAlign.justify,
                             textAlignVertical: TextAlignVertical.bottom,
-                            decoration: const InputDecoration(
+                            decoration:  InputDecoration(
                               hintText: "Search product here",
                               enabledBorder: OutlineInputBorder(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(8.0)),
                                 borderSide: BorderSide(
-                                    color: TheamColors.backgroundColor,
+                                    color: TheamColors.backgroundColor ,
                                     width: 0),
                               ),
                               focusedBorder: OutlineInputBorder(
@@ -120,41 +123,45 @@ class SearchScreen extends StatelessWidget {
             Consumer<ProductController>(
               builder: (BuildContext context, value, Widget? child) {
                 var dataListLength = value.searchProducts;
-                return dataListLength == 0 || dataListLength == null
-                    ? Center(
-                        child:
-                            Text("Your cart is empty Please continue shopping"),
-                      )
-                    : value.loading == true
-                        ? const Center(child: CircularProgressIndicator())
-                        : Expanded(
-                            child: Container(
-                                width: screenwidth,
-                                height: screenhight * 0.36,
-                                // color: Color.fromARGB(255, 214, 83, 83),
-                                child: ListView.builder(
-                                  scrollDirection: Axis.vertical,
-                                  itemCount: value.searchProducts.products.length,
-                                  itemBuilder: (context, index) {
-                                    var items = value.searchProducts.products[index];
-                                    return Wrap(
-                                      runSpacing: screenwidth * 0.03,
-                                      alignment: WrapAlignment.spaceEvenly,
-                                      children: [
-                                        Card2(
-                                          discription: items['discription'],
-                                          price: items['price'].toString(),
-                                          thumbnailImage: items['thumbnail'],
-                                          title: items['title'],
-                                          productId: items['_id'],
-                                          SingleProduct: items,
-                                          starRating: items['rating'],
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                )),
-                          );
+                if (value.loading == true) {
+                  return const Center(child: CircularProgressIndicator());
+                } else {
+                  if (dataListLength == 0 || dataListLength == null) {
+                    return Center(
+                      child: Text("No product found"),
+                    );
+                  } else {
+                    return Expanded(
+                      child: Container(
+                          width: screenwidth,
+                          height: screenhight * 0.36,
+                          // color: Color.fromARGB(255, 214, 83, 83),
+                          child: ListView.builder(
+                            scrollDirection: Axis.vertical,
+                            itemCount: value.searchProducts.products!.length,
+                            itemBuilder: (context, index) {
+                              var items = value.searchProducts.products![index];
+                              return Wrap(
+                                runSpacing: screenwidth * 0.03,
+                                alignment: WrapAlignment.spaceEvenly,
+                                children: [
+                                  Card2(
+                                    discription: items.discription.toString(),
+                                    price: items.price.toString(),
+                                    thumbnailImage: items.thumbnail.toString(),
+                                    title: items.title.toString(),
+                                    productId: items.sId.toString(),
+                                    SingleProduct: items,
+                                    starRating: items.rating as num,
+                                    likes: items.likes,
+                                  ),
+                                ],
+                              );
+                            },
+                          )),
+                    );
+                  }
+                }
               },
             ),
           ],

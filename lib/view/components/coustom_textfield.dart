@@ -75,12 +75,12 @@ class CoustomTextfield extends StatelessWidget {
                     ),
                   ),
                   hintText: placeholder,
-                  enabledBorder: const OutlineInputBorder(
+                  enabledBorder:  OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(8.0)),
                     borderSide:
                         BorderSide(color: TheamColors.primaryColor, width: 1),
                   ),
-                  focusedBorder: const OutlineInputBorder(
+                  focusedBorder:  OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(8.0)),
                     borderSide:
                         BorderSide(color: TheamColors.primaryColor, width: 2),

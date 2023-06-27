@@ -15,3 +15,77 @@
                                       shreyaspatil
 
                                       userimages
+
+
+
+
+
+
+                                              Consumer<AuthController>(
+          builder: (context, value, child) {
+            if (value.loading == true) {
+              return Container(
+                  alignment: Alignment.center,
+                  child: CircularProgressIndicator(
+                    color: Colors.deepPurpleAccent,
+                  ));
+            } else {
+              if (value.user['success'] == true) {
+                return Container(
+                  color: Colors.amber,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                    H1text(
+                        fonttext: value.user['userresponse']['fullName'],
+                        weight: FontWeight.bold,
+                        size: screenwidth * 0.056),
+                          SizedBox(
+                      height: screenhight * 0.008,
+                    ),
+                        H1text(
+                        fonttext: value.user['userresponse']['number'],
+                        weight: FontWeight.w400,
+                        size: screenwidth * 0.034),
+                        H1text(
+                        fonttext: value.user['userresponse']['email'],
+                        weight: FontWeight.w400,
+                        size: screenwidth * 0.034),
+                         Text("Details this is a very very long string because to test the max text length of the address field on the page his is a very very long string because to test the max text length of the address field on the page", 
+                         maxLines: 2,
+                         overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: TheamColors.HtexrtColor1,
+                            fontWeight: FontWeight.w400,
+                            fontSize: screenwidth * 0.034,
+                          ),
+                          ),
+                            SizedBox(
+                      height: screenhight * 0.01,
+                    ),
+                         InkWell(
+                          onTap: () {
+                                  Navigator.push(context,
+                                            MaterialPageRoute(
+                                          builder: (context) {
+                                            return EditUserDetailsScreen();
+                                          },
+                                        ));
+                          },
+                          child: Text("Edit Details", 
+                          style: TextStyle(
+                            color: Colors.deepPurpleAccent
+                          ),
+                          ),
+                        )
+                  ]),
+                );
+              } else {
+                return Center(
+                  child: Text("User is not authanticated"),
+                );
+              }
+            }
+          },
+        ),

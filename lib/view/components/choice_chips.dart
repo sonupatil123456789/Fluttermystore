@@ -14,9 +14,11 @@ class ChoiceChipCatogary extends StatefulWidget {
   Color textColor;
   bool isVisible;
   Function ChoiceChip;
+  String chipType;
 
   ChoiceChipCatogary({
     super.key,
+    required this.chipType,
     required this.data,
     required this.bgColor,
     required this.selectColor,
@@ -53,19 +55,18 @@ class _ChoiceChipCatogaryState extends State<ChoiceChipCatogary> {
                     ? BorderSide(
                         color: widget.textColor,
                         width: 2,
-                        style: BorderStyle.solid
-                        )
-                    : BorderSide(
+                        style: BorderStyle.solid)
+                    :  BorderSide(
                         color: TheamColors.backgroundColor,
                         width: 0,
                         style: BorderStyle.solid),
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(8),
                     bottomLeft: Radius.circular(8),
                     topRight: Radius.circular(8),
                     bottomRight: Radius.circular(8))),
             label: Text(
-              '${widget.data[index]['title']}',
+              '${widget.chipType == "Category" ? widget.data[index].title : widget.chipType == "Filter" ? widget.data[index]['title'] : widget.data[index]}',
               style: GoogleFonts.rubik(
                   fontWeight: FontWeight.w500,
                   fontSize: 12,
@@ -79,8 +80,9 @@ class _ChoiceChipCatogaryState extends State<ChoiceChipCatogary> {
             // ),
             selected: _value == index,
             onSelected: (bool selected) {
-              widget.ChoiceChip(widget.data[index]);
-              // print("${widget.data[index]}");
+              widget.ChoiceChip(widget.chipType == "Category"
+                  ? widget.data[index]
+                  : widget.data[index]);
               setState(() {
                 _value = selected ? index : null;
                 // selectedButton = selected;

@@ -5,5 +5,7 @@ abstract class BaseApi {
 
   Future deletApiResponse(String url, dynamic data, context);
 
+  Future updateApiResponse(String url, dynamic data, context);
+
   // Future postMultipartApiResponse(String url, dynamic data);
 }

@@ -1,17 +1,17 @@
-class CategoryModel {
+class BrandModel {
   bool? success;
   String? message;
-  List<Categorys>? categorys;
+  List<Brands>? brands;
 
-  CategoryModel({this.success, this.message, this.categorys});
+  BrandModel({this.success, this.message, this.brands});
 
-  CategoryModel.fromJson(Map<String, dynamic> json) {
+  BrandModel.fromJson(Map<String, dynamic> json) {
     success = json['success'];
     message = json['message'];
-    if (json['categorys'] != null) {
-      categorys = <Categorys>[];
-      json['categorys'].forEach((v) {
-        categorys!.add(new Categorys.fromJson(v));
+    if (json['brands'] != null) {
+      brands = <Brands>[];
+      json['brands'].forEach((v) {
+        brands!.add(new Brands.fromJson(v));
       });
     }
   }
@@ -20,33 +20,36 @@ class CategoryModel {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['success'] = this.success;
     data['message'] = this.message;
-    if (this.categorys != null) {
-      data['categorys'] = this.categorys!.map((v) => v.toJson()).toList();
+    if (this.brands != null) {
+      data['brands'] = this.brands!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
-class Categorys {
+class Brands {
   String? sId;
   String? title;
   String? discription;
+  String? brandImage;
   String? createdAt;
   String? updatedOn;
   int? iV;
 
-  Categorys(
+  Brands(
       {this.sId,
       this.title,
       this.discription,
+      this.brandImage,
       this.createdAt,
       this.updatedOn,
       this.iV});
 
-  Categorys.fromJson(Map<String, dynamic> json) {
+  Brands.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     title = json['title'];
     discription = json['discription'];
+    brandImage = json['brandImage'];
     createdAt = json['createdAt'];
     updatedOn = json['updatedOn'];
     iV = json['__v'];
@@ -57,6 +60,7 @@ class Categorys {
     data['_id'] = this.sId;
     data['title'] = this.title;
     data['discription'] = this.discription;
+    data['brandImage'] = this.brandImage;
     data['createdAt'] = this.createdAt;
     data['updatedOn'] = this.updatedOn;
     data['__v'] = this.iV;

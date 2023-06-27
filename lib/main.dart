@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:mystore/App.dart';
 import 'package:mystore/controllers/auth_controller.dart';
+import 'package:mystore/controllers/brand_controller.dart';
 import 'package:mystore/controllers/cart_controller.dart';
+import 'package:mystore/controllers/category_controller.dart';
 import 'package:mystore/controllers/connectiviety_controller.dart';
-import 'package:mystore/controllers/homescreen_controller.dart';
+import 'package:mystore/controllers/order_controller.dart';
 import 'package:mystore/controllers/product_controller.dart';
+import 'package:mystore/utils/constants/colorpallets.dart';
 import 'package:mystore/utils/routes/routes.dart';
 import 'package:mystore/utils/routes/routes_name.dart';
-import 'package:mystore/view/onboardingscreen/onboarding_scree%20n.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -34,13 +35,16 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => AuthController()),
         ChangeNotifierProvider(create: (context) => CartController()),
         ChangeNotifierProvider(create: (context) => ProductController()),
-        ChangeNotifierProvider(create: (context) => HomeScreenController())
+        ChangeNotifierProvider(create: (context) => CategoryController()),
+        ChangeNotifierProvider(create: (context) => BrandController()),
+        ChangeNotifierProvider(create: (context) => OrderController()),
+        ChangeNotifierProvider(create: (context) => TheamColors())
       ],
       child: MaterialApp(
-        theme: ThemeData(primaryColor: Colors.amberAccent),
-        title: 'My store',
-        darkTheme: ThemeData.dark(),
-        initialRoute: RoutesName.app,   
+        theme: ThemeData(),
+        // title: 'My store',
+        // darkTheme: ThemeData.dark(),
+        initialRoute: RoutesName.app,
         onGenerateRoute: Routes.generateRoutes,
       ),
     );

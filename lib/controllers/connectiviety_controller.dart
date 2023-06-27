@@ -1,18 +1,22 @@
 import 'dart:async';
 // import 'package:connectivity/connectivity.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/material.dart';
+import 'package:mystore/controllers/auth_controller.dart';
+import 'package:mystore/utils/listners_utils.dart';
+import 'package:provider/provider.dart';
+
+import '../utils/constants/colorpallets.dart';
+import '../utils/routes/routes_name.dart';
 // import 'package:network_aware/enums/connectivity_status.dart';
 
-enum ConnectivityStatus {
-  None,
-  WiFi,
-  Cellular,
-  Offline
-}
-class ConnectivityService {
+enum ConnectivityStatus { None, WiFi, Cellular, Offline }
+
+class ConnectivityService with ChangeNotifier {
   // Create our public controller
-  
-  StreamController<ConnectivityStatus> connectionStatusController = StreamController<ConnectivityStatus>();
+
+  StreamController<ConnectivityStatus> connectionStatusController =
+      StreamController<ConnectivityStatus>();
   ConnectivityService() {
     // Subscribe to the connectivity Chanaged Steam
     Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
@@ -33,4 +37,5 @@ class ConnectivityService {
         return ConnectivityStatus.Offline;
     }
   }
+
 }

@@ -1,15 +1,8 @@
-import 'dart:convert';
-import 'dart:io';
-import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:mystore/controllers/auth_controller.dart';
 import 'package:mystore/utils/constants/colorpallets.dart';
-import 'package:mystore/utils/constants/data_list.dart';
-import 'package:mystore/utils/routes/routes_name.dart';
 import 'package:mystore/view/components/coustom_textfield.dart';
 import 'package:provider/provider.dart';
 

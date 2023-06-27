@@ -1,5 +1,7 @@
+import '../models/cart_model.dart';
+
 class Formater {
-  static likeformater(likes) {
+  static likeformater(String likes) {
     late double thousand = int.parse(likes) / 1000;
     late double lakh = int.parse(likes) / 100000;
 
@@ -12,14 +14,16 @@ class Formater {
     }
   }
 
-  static Future calculateTotal(List data) async {
+  
+
+  static Future calculateTotal(List<UserCart> data) async {
     late num discountPrice;
     late num total;
 
     discountPrice = data.fold(0,
-        (value, element) => value + element['product']['discountPercentage']*element['quantity']);
+        (value, element) => value + element.product!.discountPercentage! *element.quantity);
     total = data.fold(
-        0, (value, element) => value + element['product']['price']*element['quantity']);
+        0, (value, element) => value + element.product!.price! *element.quantity);
 
     return <String, dynamic>{"total": total, "discountPrice": discountPrice};
   }

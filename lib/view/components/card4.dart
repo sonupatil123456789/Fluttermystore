@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:like_button/like_button.dart';
+import 'package:mystore/utils/conversion_formater.dart';
 import 'package:mystore/view/components/heading_text.dart';
 import 'package:mystore/view/components/like.dart';
 import 'package:mystore/view/components/paragraph_text.dart';
@@ -10,20 +11,18 @@ import 'package:provider/provider.dart';
 
 import '../../controllers/product_controller.dart';
 import '../../models/product_model.dart';
-import '../../utils/constants/colorpallets.dart';
 import '../../utils/routes/routes_name.dart';
 
-class Card2 extends StatefulWidget {
+class Card4 extends StatefulWidget {
   String productId;
   Products SingleProduct;
   String thumbnailImage;
   String title;
   String discription;
   String price;
-  num starRating;
   dynamic likes;
 
-  Card2({
+  Card4({
     super.key,
     required this.productId,
     required this.SingleProduct,
@@ -31,15 +30,14 @@ class Card2 extends StatefulWidget {
     required this.title,
     required this.discription,
     required this.price,
-    required this.starRating,
     required this.likes,
   });
 
   @override
-  State<Card2> createState() => _Card2State();
+  State<Card4> createState() => _Card4State();
 }
 
-class _Card2State extends State<Card2> {
+class _Card4State extends State<Card4> {
   late Map inputFieldData = {};
   late ProductController productController = ProductController();
 
@@ -62,7 +60,7 @@ class _Card2State extends State<Card2> {
         height: screenhight * 0.14,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
-          color: TheamColors.cardColor,
+          // color: Color.fromARGB(255, 226, 134, 134),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -83,8 +81,7 @@ class _Card2State extends State<Card2> {
                   ),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(12),
-                    child: 
-                    CachedNetworkImage(
+                    child: CachedNetworkImage(
                       imageUrl: widget.thumbnailImage,
                       width: screenwidth * 0.15,
                       height: screenhight * 0.06,
@@ -94,14 +91,6 @@ class _Card2State extends State<Card2> {
                       fadeOutCurve: Curves.easeOut,
                       fadeInDuration: const Duration(milliseconds: 500),
                     ),
-                    
-                    
-                    //  Image.network(
-                    //   widget.thumbnailImage,
-                    //   width: screenwidth * 0.15,
-                    //   height: screenhight * 0.06,
-                    //   fit: BoxFit.contain,
-                    // ),
                   ),
                 ),
                 SizedBox(width: screenwidth * 0.05),
@@ -162,13 +151,9 @@ class _Card2State extends State<Card2> {
                                     MainAxisAlignment.spaceEvenly,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Icon(
-                                    Icons.star,
-                                    color: Colors.deepPurpleAccent,
-                                    size: screenwidth * 0.04,
-                                  ),
                                   Ptext(
-                                    fonttext: widget.starRating.toString(),
+                                    fonttext:
+                                        "${Formater.likeformater(widget.likes.toString()).toString()}",
                                     size: screenwidth * 0.022,
                                     weight: FontWeight.w600,
                                   ),

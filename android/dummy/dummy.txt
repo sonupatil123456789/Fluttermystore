@@ -152,3 +152,36 @@ Stepper(
     _currentStep > 0 ? _currentStep -= 1 : null;
     notifyListeners();
   }
+
+
+
+
+      // return InkWell(
+    //   onTap: () {
+    //     crowselclick();
+    //   },
+    //   child: CarouselSlider(
+    //     options: CarouselOptions(height: 200.0,
+    //     // padEnds: false,
+    //     initialPage: 1,
+    //     viewportFraction: 1,
+    //     reverse: false,
+    //     enableInfiniteScroll: false,
+    //     autoPlay: true,
+    //     aspectRatio: 16/9
+    //     ),
+    //     items: imgList.map((i) {
+    //       return Builder(
+    //         builder: (BuildContext context) {
+    //           return Container(
+    //               width: MediaQuery.of(context).size.width,
+    //               margin: EdgeInsets.symmetric(horizontal: 5.0),
+    //               decoration: BoxDecoration(color: Colors.amber),
+    //               child: Image.network(i.toString(), fit: BoxFit.cover,)
+
+    //               );
+    //         },
+    //       );
+    //     }).toList(),
+    //   ),
+    // );

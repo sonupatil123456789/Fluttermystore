@@ -2,26 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:mystore/data/base_api.dart';
 import 'package:mystore/data/network_api.dart';
 import 'package:mystore/models/cart_model.dart';
+import 'package:mystore/models/order_model.dart';
 import 'package:mystore/utils/constants/api_endpoints.dart';
 import '../utils/constants/colorpallets.dart';
 import '../utils/listners_utils.dart';
 
-class CartRepository {
+class OrderRepository {
   BaseApi _apiServices = networkApi();
 
   dynamic apiResponse;
-  late CartModel response;
+  late OrderModel response;
 
-// function to add product to user cart
-  Future addToCart(data, context) async {
+// function to create order in backend
+  Future placeOrder(data, context) async {
     try {
       apiResponse = await _apiServices.postApiResponse(
-          ApiEndpointsUrl.addToCart, data, context);
-      response = CartModel.fromJson(apiResponse);
+          ApiEndpointsUrl.creatOrder, data, context);
+      response = OrderModel.fromJson(apiResponse);
       return response;
-    } catch (ex) {
+    } catch (ex, stack) {
+      print("o=============================ct $ex ===========$stack");
       ListnersUtils.showFlushbarMessage(
-          "Error during adding product try to add product again",
+          "Error during ordering product try to add ordering again",
           Colors.redAccent,
           TheamColors.PtexrtColor2,
           "Error",
@@ -31,17 +33,10 @@ class CartRepository {
   }
 
   // function to view perticular user cart
-  Future fetchUserCart(data, context) async {
+  Future fetchOrderCart(Id, context) async {
     try {
       apiResponse = await _apiServices.getApiResponse(
-          "${ApiEndpointsUrl.fetchUserCart}" + data, context);
-      if (apiResponse['success'] == true) {
-        response = CartModel.fromJson(apiResponse);
-        return response;
-      } else {
-        response = CartModel.fromJson(apiResponse);
-        return response;
-      }
+          ApiEndpointsUrl.getAllOrders + Id, context);
     } catch (ex) {
       ListnersUtils.showFlushbarMessage("${ex.toString()}", Colors.redAccent,
           TheamColors.PtexrtColor2, "Error", Icons.done, context);

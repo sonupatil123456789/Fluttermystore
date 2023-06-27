@@ -1,46 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:mystore/models/category_model.dart';
+import 'package:mystore/models/brand_model.dart';
 import 'package:mystore/view/components/card.dart';
+import 'package:mystore/view/components/card3.dart';
 import 'package:mystore/view/components/navbar.dart';
-import 'package:mystore/view/screens/cart_list.dart';
-import 'package:mystore/view/screens/search_screen.dart';
 import 'package:provider/provider.dart';
 
+import '../../controllers/brand_controller.dart';
 import '../../controllers/cart_controller.dart';
-import '../../controllers/category_controller.dart';
-import '../../controllers/product_controller.dart';
-import '../../utils/constants/assets.dart';
-import '../components/bottom_sheet.dart';
-import '../components/card3.dart';
-import '../components/heading_text.dart';
-import '../components/icon_svg_button.dart';
-import '../components/paragraph_text.dart';
 
-class CategoryList extends StatefulWidget {
-  
-  CategoryList({super.key});
+class BrandList extends StatefulWidget {
+  BrandList({super.key});
 
   @override
-  State<CategoryList> createState() => _CategoryListState();
+  State<BrandList> createState() => _BrandListState();
 }
 
-class _CategoryListState extends State<CategoryList> {
-  late CategoryController categoryController = CategoryController();
+class _BrandListState extends State<BrandList> {
+  late BrandController brandController = BrandController();
   late CartController cartController = CartController();
-    late String categoryValue = "643bbe6a81145223f448ea5f";
-  late String categoryName = "Mens fashion";
-
-
+  late String brandValue = "648abd3507d47212d565cca3";
+  late String brandName = "Apple";
 
   @override
   void initState() {
-    categoryController =
-        Provider.of<CategoryController>(context, listen: false);
-
-    categoryController.categoryController(context);
-    categoryController.fetchProductByCategoryController(context, categoryValue);
+    brandController = Provider.of<BrandController>(context, listen: false);
+    brandController.fetchProductByBrandController(context, brandValue);
+    brandController.brandController(context);
     super.initState();
   }
 
@@ -54,21 +41,24 @@ class _CategoryListState extends State<CategoryList> {
           // color: Colors.amberAccent,
           child: Column(
             children: [
-              Navbar(
+           Consumer<BrandController>(
+            builder: (BuildContext context, value, Widget? child) { 
+            return     Navbar(
                 isVisible: false,
-                title: 'Category',
-                subtitle: '[1]',
+                title: 'Brands',
+                subtitle: '[${value.products.products!.length}]',
                 cart: true,
                 filter: false,
                 search: false,
                 backButton: true,
                 cartCount: null,
-              ),
+              );
+           },),
 //////////////////////////////////////////////////////////////////////////////////
 
-              Consumer<CategoryController>(
+              Consumer<BrandController>(
                   builder: (BuildContext context, value, Widget? child) {
-                var items = value.category.categorys;
+                var items = value.brand.brands;
                 return Container(
                     width: screenwidth * 0.90,
                     height: screenhight * 0.11,
@@ -86,25 +76,25 @@ class _CategoryListState extends State<CategoryList> {
                               )
                             : ListView.builder(
                                 scrollDirection: Axis.horizontal,
-                                itemCount: value.category.categorys!.length,
+                                itemCount: value.brand.brands!.length,
                                 itemBuilder: (context, index) {
-                                  var items = value.category.categorys![index];
+                                  var items = value.brand.brands![index];
                                   return Wrap(
                                     crossAxisAlignment:
                                         WrapCrossAlignment.center,
                                     runAlignment: WrapAlignment.center,
                                     children: [
                                       Card3(
-                                        image: items.title.toString(),
+                                        image: items.brandImage.toString(),
                                         name: items.title.toString(),
-                                        onCardClick: (categoryValue) {
-                                          print(
-                                              " =======================$categoryValue");
-                                           categoryController.fetchProductByCategoryController(context, categoryValue);
+                                        onCardClick: (brandValue) {
+                                          brandController
+                                              .fetchProductByBrandController(
+                                                  context, brandValue);
                                         },
-                                       
+                                        
                                         categorys: items,
-                                        cardType: "CategoryScreen",
+                                        cardType: "BrandScreen",
                                       ),
                                     ],
                                   );
@@ -115,7 +105,7 @@ class _CategoryListState extends State<CategoryList> {
               SizedBox(
                 height: screenhight * 0.01,
               ),
-              Consumer<CategoryController>(
+              Consumer<BrandController>(
                 builder: (BuildContext context, value, Widget? child) {
                   print("value : ${value.products.success}");
 
@@ -145,14 +135,14 @@ class _CategoryListState extends State<CategoryList> {
                                 shrinkWrap: false,
                                 itemCount: value.products.products!.length,
                                 gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                    new SliverGridDelegateWithFixedCrossAxisCount(
                                   crossAxisCount: 2,
                                   childAspectRatio: 2 / 3,
                                 ),
                                 itemBuilder: (BuildContext context, int index) {
                                   var items = value.products.products![index];
                                   return Padding(
-                                    padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                                    padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
                                     child: Card1(
                                       addToCart: () {
                                         Map data = {

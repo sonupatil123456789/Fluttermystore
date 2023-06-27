@@ -13,8 +13,8 @@ class AuthRepository {
 // function to authanticate with login user from backend database
   Future loginUser(data, context) async {
     try {
-      apiResponse =
-          await _apiServices.postApiResponse(ApiEndpointsUrl.loginUrl, data,context);
+      apiResponse = await _apiServices.postApiResponse(
+          ApiEndpointsUrl.loginUrl, data, context);
       return apiResponse;
     } catch (ex) {
       ListnersUtils.showFlushbarMessage("${ex.toString()}", Colors.redAccent,
@@ -25,12 +25,10 @@ class AuthRepository {
 // function to authanticate with register user from backend database
   Future registerUser(data, context) async {
     try {
-      apiResponse =
-          await _apiServices.postApiResponse(ApiEndpointsUrl.registerUrl, data,context);
-      print(apiResponse);
+      apiResponse = await _apiServices.postApiResponse(
+          ApiEndpointsUrl.registerUrl, data, context);
       return apiResponse;
     } catch (ex) {
-      print(ex);
       ListnersUtils.showFlushbarMessage("${ex.toString()}", Colors.redAccent,
           TheamColors.PtexrtColor2, "Error", Icons.done, context);
     }
@@ -39,12 +37,10 @@ class AuthRepository {
   // function to authanticate valid user using token from backend database
   Future authanticateUser(data, context) async {
     try {
-      apiResponse = await _apiServices
-          .getApiResponse("${ApiEndpointsUrl.verifyUserUrl}" + data,context);
-
+      apiResponse = await _apiServices.getApiResponse(
+          "${ApiEndpointsUrl.verifyUserUrl}" + data, context);
       return apiResponse;
     } catch (ex) {
-      // print(ex);
       ListnersUtils.showFlushbarMessage("${ex.toString()}", Colors.redAccent,
           TheamColors.PtexrtColor2, "Error", Icons.done, context);
     }

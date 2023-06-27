@@ -51,7 +51,7 @@ class TextField extends StatelessWidget {
               ),
               hintText: placeholder,
               labelText: labelText,
-              labelStyle: const TextStyle(
+              labelStyle:  TextStyle(
                 color: TheamColors.primaryColor,
               ),
               hintStyle: TextStyle(
@@ -59,12 +59,12 @@ class TextField extends StatelessWidget {
               ),
               filled: true,
               fillColor: TheamColors.primaryColor,
-              enabledBorder: const OutlineInputBorder(
+              enabledBorder:  OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(8.0)),
                 borderSide:
                     BorderSide(color: TheamColors.primaryColor, width: 1),
               ),
-              focusedBorder: const OutlineInputBorder(
+              focusedBorder:  OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(8.0)),
                 borderSide:
                     BorderSide(color: TheamColors.primaryColor, width: 2),

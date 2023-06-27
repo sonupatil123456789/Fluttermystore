@@ -1,21 +1,28 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:mystore/models/product_model.dart';
 import 'package:mystore/utils/constants/colorpallets.dart';
 import 'package:mystore/utils/routes/routes_name.dart';
 import 'package:mystore/view/components/heading_text.dart';
+import 'package:mystore/view/components/like.dart';
 import 'package:mystore/view/components/paragraph_text.dart';
 import 'package:like_button/like_button.dart';
 import 'package:mystore/view/screens/product_details_screen.dart';
+import 'package:provider/provider.dart';
 
-class Card1 extends StatelessWidget {
+import '../../controllers/product_controller.dart';
+
+class Card1 extends StatefulWidget {
   String productId;
-  Map SingleProduct;
+  Products SingleProduct;
   String thumbnailImage;
   String title;
   String discription;
   String price;
   Function addToCart;
+  dynamic likes;
 
   Card1({
     super.key,
@@ -26,45 +33,65 @@ class Card1 extends StatelessWidget {
     required this.discription,
     required this.price,
     required this.addToCart,
+    required this.likes,
   });
+
+  @override
+  State<Card1> createState() => _Card1State();
+}
+
+class _Card1State extends State<Card1> {
+  // late dynamic newLikeValue;
+  // late dynamic isLikeBtnClicked;
+  late Map inputFieldData = {};
+  late ProductController productController = ProductController();
+
+  @override
+  void initState() {
+    productController = Provider.of<ProductController>(context, listen: false);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     final dynamic screenhight = MediaQuery.of(context).size.height;
     final dynamic screenwidth = MediaQuery.of(context).size.width;
-    // print("=========================${SingleProduct}");
+
     return InkWell(
       onTap: () {
-        Navigator.pushNamed(
-          context,
-          RoutesName.productsDetail,
-          arguments: {"SingleProduct" : SingleProduct}
-        );
+        Navigator.pushNamed(context, RoutesName.productsDetail,
+            arguments: {"SingleProduct": widget.SingleProduct});
       },
       child: Container(
-        margin: EdgeInsets.fromLTRB(8, 0, 8, 0),
+        margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
         width: screenwidth * 0.42,
         height: screenhight * 0.34,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(4),
-          // color: Color.fromARGB(255, 226, 134, 134),
+          borderRadius: BorderRadius.circular(6),
+          color: TheamColors.cardColor,
         ),
         child: Stack(
+          alignment: AlignmentDirectional.center,
           children: [
             Column(
               children: [
                 Container(
                   width: screenwidth * 0.42,
                   height: screenhight * 0.16,
-                  child: AspectRatio(
-                    aspectRatio: 16 / 9,
-                    child: Image.network(
-                      thumbnailImage,
-                      width: screenwidth * 0.40,
-                      height: screenhight * 0.16,
-                      // fit: BoxFit.cover,
+                  // alignment: Alignment.center,
+                  child:
+
+                        CachedNetworkImage(
+                      imageUrl: widget.thumbnailImage,
+                             width: screenwidth * 0.40,
+                    height: screenhight * 0.16,
+                      fit: BoxFit.contain,
+                      errorWidget: (context, url, error) => Icon(Icons.error),
+                      fadeOutDuration: const Duration(milliseconds: 1000),
+                      fadeOutCurve: Curves.easeOut,
+                      fadeInDuration: const Duration(milliseconds: 500),
                     ),
-                  ),
+                  
                 ),
                 SizedBox(
                   height: screenhight * 0.01,
@@ -83,7 +110,7 @@ class Card1 extends StatelessWidget {
                         height: screenhight * 0.03,
                         // color: Color.fromARGB(255, 64, 255, 166),
                         child: H1text(
-                          fonttext: title,
+                          fonttext: widget.title,
                           size: screenwidth * 0.036,
                           weight: FontWeight.w600,
                         ),
@@ -96,7 +123,7 @@ class Card1 extends StatelessWidget {
                         height: screenhight * 0.060,
                         // color: Colors.amberAccent,
                         child: Ptext(
-                          fonttext: discription,
+                          fonttext: widget.discription,
                           size: screenwidth * 0.026,
                           weight: FontWeight.w300,
                         ),
@@ -110,13 +137,13 @@ class Card1 extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               H1text(
-                                fonttext: " \u{20B9} $price",
+                                fonttext: " \u{20B9} ${widget.price}",
                                 size: screenwidth * 0.038,
                                 weight: FontWeight.w600,
                               ),
                               InkWell(
                                 onTap: () {
-                                  addToCart();
+                                  widget.addToCart();
                                 },
                                 child: Container(
                                     width: screenwidth * 0.12,
@@ -127,8 +154,7 @@ class Card1 extends StatelessWidget {
                                     child: Icon(
                                       Icons.add,
                                       color: TheamColors.backgroundColor,
-                                    )
-                                    ),
+                                    )),
                               )
                             ],
                           ),
@@ -139,30 +165,47 @@ class Card1 extends StatelessWidget {
                 )
               ],
             ),
-            Positioned(
-                top: 6,
-                right: 6,
-                child: Container(
-                  // color: Color.fromARGB(255, 197, 246, 22),
-                  width: screenwidth * 0.10,
-                  height: screenhight * 0.04,
-                  child: LikeButton(
-                    circleColor: CircleColor(
-                        start: Color(0xff00ddff), end: Color(0xff0099cc)),
-                    bubblesColor: BubblesColor(
-                      dotPrimaryColor: Color(0xff33b5e5),
-                      dotSecondaryColor: Color(0xff0099cc),
-                    ),
-                    likeBuilder: (bool isLiked) {
-                      print(isLiked);
-                      return Icon(
-                        Icons.favorite,
-                        color: isLiked ? Colors.deepPurpleAccent : Colors.grey,
-                        size: screenwidth * 0.050,
-                      );
-                    },
-                  ),
-                ))
+            Consumer(
+              builder: (BuildContext context, value, Widget? child) {
+                return Positioned(
+                    top: 6,
+                    right: 6,
+                    child: CoustomLike(
+                      icons: Icons.favorite,
+                      initLikes: widget.likes,
+                      isLiked: (like) {
+                        print(like);
+
+                        if (like == true) {
+                          inputFieldData = {
+                            "id": widget.productId,
+                            "like": widget.likes + 1,
+                            "isLiked": true
+                          };
+                        } else {
+                          var value = widget.likes -
+                              1; // value =<  0 ? 0widget.likes - 1;
+                          value <= 0
+                              ? inputFieldData = {
+                                  "id": widget.productId,
+                                  "like": 0,
+                                  "isLiked": false
+                                }
+                              : inputFieldData = {
+                                  "id": widget.productId,
+                                  "like": widget.likes - 1,
+                                  "isLiked": false
+                                };
+                        }
+                        print(
+                            "=========newLiked value :${inputFieldData['like']}  old value is : ${widget.likes}");
+                        productController.likeratingProductsController(
+                            context, inputFieldData);
+                      },
+                      likeValue: null,
+                    ));
+              },
+            )
           ],
         ),
       ),

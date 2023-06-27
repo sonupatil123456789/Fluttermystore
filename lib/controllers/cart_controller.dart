@@ -12,10 +12,7 @@ import '../utils/seassion_manager.dart';
 class CartController with ChangeNotifier {
   final cartRepo = CartRepository();
 
-  late CartModel _cart = CartModel(
-      message: "",
-      success: false,
-      newCart: NewCart(user: "", id: "", items: []));
+  late CartModel _cart = CartModel();
   CartModel get cart => _cart;
 
   bool _loading = false;
@@ -42,7 +39,7 @@ class CartController with ChangeNotifier {
       notifyListeners();
       if (cart.success == true) {
         ListnersUtils.showFlushbarMessage(
-            "Cart is updated",
+            cart.message.toString(),
             Colors.greenAccent,
             TheamColors.PtexrtColor2,
             cart.success.toString(),
@@ -58,12 +55,12 @@ class CartController with ChangeNotifier {
       dynamic getSeassionUser = await ManageSeassion.getUserDetails();
       _cart =
           await cartRepo.fetchUserCart(getSeassionUser.elementAt(1), context);
-      Map cartTotal = await Formater.calculateTotal(_cart.newCart.items);
+      Map cartTotal = await Formater.calculateTotal(_cart.userCart as List<UserCart>);
       _price = cartTotal['total'];
       _discountPrice = cartTotal['discountPrice'];
       _discountPercent = _discountPrice / _price * 100;
       if (kDebugMode) {
-        print("cart and  and  cart items: ${cart.newCart.items} and total is ");
+        print("cart and  and  cart items: ${cart.userCart} and total is ");
       }
       setLoadingState(false);
       notifyListeners();
@@ -87,7 +84,7 @@ class CartController with ChangeNotifier {
   Future updateCartState(context) async {
     dynamic getSeassionUser = await ManageSeassion.getUserDetails();
     _cart = await cartRepo.fetchUserCart(getSeassionUser.elementAt(1), context);
-    Map cartTotal = await Formater.calculateTotal(_cart.newCart.items);
+    Map cartTotal = await Formater.calculateTotal(_cart.userCart as List<UserCart>);
     _price = cartTotal['total'];
     _discountPrice = cartTotal['discountPrice'];
     _discountPercent = _discountPrice / _price * 100;

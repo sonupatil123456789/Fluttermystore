@@ -1,14 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:like_button/like_button.dart';
 import 'package:mystore/utils/constants/colorpallets.dart';
-import 'package:mystore/view/components/dropdown.dart';
 import 'package:mystore/view/components/heading_text.dart';
 import 'package:mystore/view/components/increment_decrement.dart';
-import 'package:mystore/view/components/paragraph_text.dart';
 
 class CartCard extends StatelessWidget {
   String discription;
@@ -63,12 +59,20 @@ class CartCard extends StatelessWidget {
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(12),
-                  child: Image.network(
-                    image,
-                    width: screenwidth * 0.15,
+                  child:
+
+
+                                          CachedNetworkImage(
+                      imageUrl: image,
+          width: screenwidth * 0.15,
                     height: screenhight * 0.12,
-                    fit: BoxFit.contain,
-                  ),
+                      fit: BoxFit.contain,
+                      errorWidget: (context, url, error) => Icon(Icons.error),
+                      fadeOutDuration: const Duration(milliseconds: 1000),
+                      fadeOutCurve: Curves.easeOut,
+                      fadeInDuration: const Duration(milliseconds: 500),
+                    ),
+                  
                 ),
               ),
               SizedBox(width: screenwidth * 0.05),
@@ -119,7 +123,7 @@ class CartCard extends StatelessWidget {
                     Container(
                       // width: screenwidth * 0.42,
                       height: screenhight * 0.02,
-                      alignment: Alignment.bottomCenter,
+                      alignment: Alignment.centerLeft,
                       // color: Colors.amberAccent,
                       child: H1text(
                         fonttext: discription,

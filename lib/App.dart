@@ -39,29 +39,28 @@ class _AppState extends State<App> {
       await Timer(Duration(milliseconds: 200), () async {
         isUserAuthanticated =
             await authController.authintacateController(context);
-        Navigator.pushNamed(
+        Navigator.pushNamedAndRemoveUntil(
             context,
             isOnboardingScreen == true
                 ? RoutesName.onboarding
                 : isUserAuthanticated == true
                     ? RoutesName.home
-                    : RoutesName.auth);
+                    : RoutesName.auth,
+            (Route<dynamic> route) => false);
       });
     } catch (ex) {}
   }
 
   @override
   void initState() {
-    print("init state run iiiiiiiii");
     getOnBoardingScreen();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    print("wiedget listner built");
     return const Scaffold(
-      backgroundColor: Colors.black87,
+      backgroundColor: Color.fromARGB(221, 255, 128, 128),
       body: Center(
         child: Text(""),
       ),
@@ -69,25 +68,3 @@ class _AppState extends State<App> {
   }
 }
 
-
-
-    // final authController =
-    //     await Provider.of<AuthController>(context, listen: false);
-    // var box = await Hive.openBox("onBoarding");
-    // isOnboardingScreen = await box.get("setOnboarding", defaultValue: true);
-    // if (kDebugMode) {
-    //   print("onboarding : $isOnboardingScreen");
-    // }
-    // try {
-    //   await Timer(Duration(milliseconds: 200), () async {
-    //     isUserAuthanticated =
-    //         await authController.authintacateController(context);
-    //     Navigator.pushNamed(
-    //         context,
-    //         isOnboardingScreen == true
-    //             ? RoutesName.onboarding
-    //             : isUserAuthanticated == true
-    //                 ? RoutesName.home
-    //                 : RoutesName.auth);
-    //   });
-    // } catch (ex) {}

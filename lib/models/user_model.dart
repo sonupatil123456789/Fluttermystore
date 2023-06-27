@@ -11,7 +11,7 @@ class UserModel {
   String? token;
   int? progress;
 
-  UserModel(
+  UserModel(user, 
       {this.sId,
       this.userId,
       this.fullName,
